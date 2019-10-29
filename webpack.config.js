@@ -60,6 +60,15 @@ const defaultConfig = {
           },
           'sass-loader'
         ]
+      },
+      {
+        test: /\.(svg|woff2?|ttf|eot|jpe?g|png|gif)(\?.*)?$/i,
+        use: {
+          loader: 'url-loader',
+          options: {
+            name: '[name].[ext]'
+          }
+        }
       }
     ]
   },
