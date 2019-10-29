@@ -58,19 +58,50 @@ const departureData = location => {
     return {
       ['id']: id,
       ['url_key']: url_key,
-      ['label']: name
+      ['label']: name,
+      ['value']: name
     }
   })
 
   return loc
 }
 
+const findUrlKey = (option, value) => {
+  let url = option.filter(item => {
+    return item.label === value
+  })
+
+  // console.log('url >>> ', url, 'url_key', url[0])
+  return url[0].url_key
+}
+
+const filterRouteBlank = (option, routematch) => {
+  let filter = []
+
+  Object.keys(routematch).forEach(key => {
+    // console.log('filterRouteBlank key >>> ', key)
+
+    option.map(item => {
+      if (item.id === Number(key)) {
+        filter.push(item)
+      }
+    })
+  })
+
+  return filter
+}
+
 class KohWidget extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      departure: 'Bangkok',
       departureOption: [],
-      arrivalOption: []
+      departureKey: 'bangkok',
+      arrival: 'Chiangmai',
+      arrivalOption: [],
+      arrivalKey: 'chiangmai',
+      routematch: {}
     }
   }
 
@@ -81,7 +112,7 @@ class KohWidget extends Component {
       )
       .then(res => {
         const data = res.data
-        console.log('locations data >>> ', data.message)
+        // console.log('locations data >>> ', data.message)
 
         if (data.status) {
           this.setState({
@@ -90,13 +121,113 @@ class KohWidget extends Component {
           })
         }
       })
+
+    axios
+      .get(
+        `https://7eliseuvsc.execute-api.ap-southeast-1.amazonaws.com/dev/transportations/routesMatch`
+      )
+      .then(res => {
+        const data = res.data
+        // console.log('routematch data >>> ', data.message)
+
+        if (data.status) {
+          this.setState({ routematch: data.message })
+        }
+      })
+  }
+
+  handleChange = name => event => {
+    const { departureOption, routematch } = this.state
+
+    if (name === 'departure') {
+      console.log('departure')
+
+      this.setState({ [name]: event.target.value })
+    } else {
+      // console.log('arrival')
+      this.setState({ [name]: event.target.value })
+    }
+  }
+
+  handleSelect = name => val => {
+    const { departureOption, routematch } = this.state
+
+    if (name === 'departure') {
+      this.handleArrival(departureOption, routematch, val)
+
+      // console.log('departure >>> ', val)
+      this.setState({
+        [name]: val,
+        [`${name}Key`]: findUrlKey(departureOption, val)
+      })
+    } else {
+      // console.log('arrival >>> ', val)
+      this.setState({
+        [name]: val,
+        [`${name}Key`]: findUrlKey(departureOption, val)
+      })
+    }
+  }
+
+  handleArrival = (option, routematch, name) => {
+    const { arrival } = this.state
+
+    let data = option.filter(item => {
+      return item.value === name
+    })
+
+    let Route = []
+    Object.entries(routematch).forEach(route => {
+      // console.log(route[0])
+      if (Number(route[0]) === data[0].id) {
+        Route.push(route[1])
+      }
+    })
+
+    // console.log('handleArrival >>> ', Route, data[0].id)
+
+    let Arrival = []
+    let checkArrival = ''
+
+    if (Route.length > 0) {
+      Object.values(Route[0]).forEach(value => {
+        option.map(item => {
+          if (item.id === value) {
+            Arrival.push(item)
+          }
+        })
+      })
+    }
+
+    if (Arrival.length > 0) {
+      const result = Arrival.some(route => {
+        return route.label === arrival
+      })
+
+      checkArrival = result ? arrival : ''
+    }
+
+    this.setState({ arrivalOption: Arrival, arrival: checkArrival })
+
+    console.log('arrival value >>> ', Arrival)
   }
 
   render() {
-    const { departureOption, arrivalOption } = this.state
+    const {
+      departureOption,
+      arrivalOption,
+      departure,
+      arrival,
+      departureKey,
+      arrivalKey,
+      routematch
+    } = this.state
 
-    console.log('departureOption >>> ', departureOption)
-    console.log('arrivalOption >>> ', arrivalOption)
+    const departureList = filterRouteBlank(departureOption, routematch)
+    const arrivalList = filterRouteBlank(arrivalOption, routematch)
+
+    // console.log('departureKey >>> ', departureKey)
+    // console.log('arrivalKey >>> ', arrivalKey)
     return (
       <Fragment>
         <ImgDiv>
@@ -111,7 +242,7 @@ class KohWidget extends Component {
               width: '100%'
             }}
             getItemValue={item => item.label}
-            items={departureOption}
+            items={departureList}
             renderInput={props => {
               return (
                 <input
@@ -121,21 +252,35 @@ class KohWidget extends Component {
                     width: '100%',
                     height: '50px',
                     borderRadius: '10px 10px 0 0',
-                    border: 'solid 1px #e5e5e5'
+                    border: 'solid 1px #e5e5e5',
+                    fontSize: '18px',
+                    color: '#4a4a4a',
+                    fontFamily: 'Roboto',
+                    paddingLeft: '16px'
                   }}
                 />
               )
             }}
-            renderItem={(item, isHighlighted) => (
-              <div
-                style={{ background: isHighlighted ? 'lightgray' : 'white' }}
-              >
-                {item.label}
-              </div>
-            )}
-            value={this.state.value}
-            onChange={e => (value = e.target.value)}
-            onSelect={val => (value = val)}
+            renderItem={(item, isHighlighted) => {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    background: isHighlighted ? '#ffc800' : 'white',
+                    fontSize: '16px',
+                    fontFamily: 'Roboto',
+                    color: '#4a4a4a',
+                    padding: '8px 16px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {item.label}
+                </div>
+              )
+            }}
+            value={departure}
+            onChange={this.handleChange('departure')}
+            onSelect={this.handleSelect('departure')}
           />
           <Autocomplete
             wrapperStyle={{
@@ -143,7 +288,7 @@ class KohWidget extends Component {
               width: '100%'
             }}
             getItemValue={item => item.label}
-            items={departureOption}
+            items={arrivalList}
             renderInput={props => {
               return (
                 <input
@@ -153,21 +298,35 @@ class KohWidget extends Component {
                     width: '100%',
                     height: '50px',
                     borderRadius: '0 0 10px 10px',
-                    border: 'solid 1px #e5e5e5'
+                    border: 'solid 1px #e5e5e5',
+                    fontSize: '18px',
+                    color: '#4a4a4a',
+                    fontFamily: 'Roboto',
+                    paddingLeft: '16px'
                   }}
                 />
               )
             }}
-            renderItem={(item, isHighlighted) => (
-              <div
-                style={{ background: isHighlighted ? 'lightgray' : 'white' }}
-              >
-                {item.label}
-              </div>
-            )}
-            value={this.state.value}
-            onChange={e => (value = e.target.value)}
-            onSelect={val => (value = val)}
+            renderItem={(item, isHighlighted) => {
+              return (
+                <div
+                  style={{
+                    display: 'flex',
+                    background: isHighlighted ? '#ffc800' : 'white',
+                    fontSize: '16px',
+                    fontFamily: 'Roboto',
+                    color: '#4a4a4a',
+                    padding: '8px 16px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {item.label}
+                </div>
+              )
+            }}
+            value={arrival}
+            onChange={this.handleChange('arrival')}
+            onSelect={this.handleSelect('arrival')}
           />
         </ImgDiv>
       </Fragment>
