@@ -7,11 +7,13 @@ import 'react-dates/initialize'
 import { DateRangePicker, SingleDatePicker } from 'react-dates'
 import Autocomplete from 'react-autocomplete'
 import axios from 'axios'
+import moment from 'moment'
 
 import './widget.scss'
 import BackGround from './assets/background_desktop.jpg'
 import KohIcon from './assets/icr_logo_yellow.png'
 import VehicleIcon from './assets/homepage-icon.png'
+import { amountData } from './data'
 
 const ImgDiv = styled.div`
   background-image: url(${BackGround});
@@ -50,6 +52,67 @@ const ImgDiv = styled.div`
   ._vehicleIcon {
     height: 26px;
     margin-bottom: 15px;
+  }
+
+  #date {
+    width: 130px !important;
+    border: 1px solid #d8d8d8 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px 0 rgba(45, 45, 45, 0.2) !important;
+    transition: 0.2s !important;
+    font-weight: 400 !important;
+    font-size: 16px !important;
+    height: 32px !important;
+  }
+  #date:hover {
+    box-shadow: 0 1px 7px 0 rgba(255, 200, 0, 0.08) !important;
+    border: 1px solid #ffc800 !important;
+    cursor: pointer !important;
+  }
+
+  .CalendarDay__selected,
+  .CalendarDay__selected:active,
+  .CalendarDay__selected:hover {
+    background: #ffc800;
+    border: 1px double #e4e7e7;
+    color: #4a4a4a;
+  }
+
+  .CalendarDay__default:hover {
+    background: #fffce6;
+    border: 1px solid #e4e7e7;
+    color: inherit;
+  }
+
+  .SingleDatePickerInput {
+    background: none !important;
+    .DateInput {
+      background: none !important;
+    }
+  }
+
+  .SingleDatePickerInput__withBorder {
+    border: none !important;
+  }
+
+  ._button {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    background: #ffc800;
+    border: 1px solid #ffc800;
+    cursor: pointer;
+
+    ._text {
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      font-family: 'Roboto' !important;
+      color: #ffffff !important;
+    }
+
+    &:hover {
+      background: #deb316;
+    }
   }
 `
 
@@ -101,7 +164,11 @@ class KohWidget extends Component {
       arrival: 'Chiangmai',
       arrivalOption: [],
       arrivalKey: 'chiangmai',
-      routematch: {}
+      routematch: {},
+      getDate: null,
+      focused: null,
+      date: null,
+      amount: '2'
     }
   }
 
@@ -134,6 +201,8 @@ class KohWidget extends Component {
           this.setState({ routematch: data.message })
         }
       })
+
+    this.setState({ getDate: moment() })
   }
 
   handleChange = name => event => {
@@ -212,6 +281,26 @@ class KohWidget extends Component {
     console.log('arrival value >>> ', Arrival)
   }
 
+  handleAmount = amount => {
+    this.setState({ amount })
+  }
+
+  handleClick = () => {
+    const { amount, date, departureKey, arrivalKey } = this.state
+
+    if (date) {
+      console.log('date >>> ', moment(date._d).format('YYYY-MM-DD'))
+      const url = `https://www.kohlife.com/transport/${departureKey}/${arrivalKey}/${moment(
+        date._d
+      ).format('YYYY-MM-DD')}/${amount}`
+
+      // window.location = url
+      window.open(url, '_blank')
+    } else {
+      console.log('not commit!')
+    }
+  }
+
   render() {
     const {
       departureOption,
@@ -220,7 +309,10 @@ class KohWidget extends Component {
       arrival,
       departureKey,
       arrivalKey,
-      routematch
+      routematch,
+      getDate,
+      date,
+      amount
     } = this.state
 
     const departureList = filterRouteBlank(departureOption, routematch)
@@ -285,7 +377,8 @@ class KohWidget extends Component {
           <Autocomplete
             wrapperStyle={{
               display: 'flex',
-              width: '100%'
+              width: '100%',
+              marginBottom: '5px'
             }}
             getItemValue={item => item.label}
             items={arrivalList}
@@ -328,6 +421,79 @@ class KohWidget extends Component {
             onChange={this.handleChange('arrival')}
             onSelect={this.handleSelect('arrival')}
           />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              width: '100%',
+              marginBottom: '5px'
+            }}
+          >
+            <SingleDatePicker
+              placeholder="When?"
+              date={date}
+              onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+              focused={this.state.focused} // PropTypes.bool
+              onFocusChange={({ focused }) => this.setState({ focused })}
+              // className="_date-input"
+              displayFormat="ddd, MMM DD"
+              hideKeyboardShortcutsPanel={true}
+              inputIconPosition="after"
+              numberOfMonths={1}
+              readOnly={true}
+            />
+            <Autocomplete
+              wrapperStyle={{
+                display: 'flex',
+                width: '140px',
+                margin: '0 18px 0 auto'
+              }}
+              getItemValue={item => item.label}
+              items={amountData}
+              renderInput={props => {
+                return (
+                  <input
+                    {...props}
+                    style={{
+                      display: 'flex',
+                      width: '140px',
+                      height: '50px',
+                      borderRadius: '10px',
+                      border: 'solid 1px #e5e5e5',
+                      fontSize: '18px',
+                      color: '#4a4a4a',
+                      fontFamily: 'Roboto',
+                      paddingLeft: '16px',
+                      cursor: 'pointer'
+                    }}
+                    readOnly={true}
+                  />
+                )
+              }}
+              renderItem={(item, isHighlighted) => {
+                return (
+                  <div
+                    style={{
+                      display: 'flex',
+                      background: isHighlighted ? '#ffc800' : 'white',
+                      fontSize: '16px',
+                      fontFamily: 'Roboto',
+                      color: '#4a4a4a',
+                      padding: '8px 16px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                )
+              }}
+              value={amount}
+              onSelect={val => this.handleAmount(val)}
+            />
+          </div>
+          <button className="_button" onClick={this.handleClick}>
+            <p className="_text">Search</p>
+          </button>
         </ImgDiv>
       </Fragment>
     )
