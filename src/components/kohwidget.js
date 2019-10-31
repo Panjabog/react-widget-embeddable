@@ -47,6 +47,7 @@ const ImgDiv = styled.div`
     margin: 0 0 5px !important;
     width: ${320 - 36}px !important;
     word-wrap: break-word !important;
+    line-height: none !important;
   }
 
   ._vehicleIcon {
@@ -108,6 +109,9 @@ const ImgDiv = styled.div`
       font-weight: 500 !important;
       font-family: 'Roboto' !important;
       color: #ffffff !important;
+      margin-bottom: 0 !important;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
     }
 
     &:hover {
@@ -445,8 +449,9 @@ class KohWidget extends Component {
             <Autocomplete
               wrapperStyle={{
                 display: 'flex',
-                width: '140px',
-                margin: '0 18px 0 auto'
+                width: '155px',
+                marginLeft: 'auto',
+                marginRight: 0
               }}
               getItemValue={item => item.label}
               items={amountData}
@@ -456,15 +461,17 @@ class KohWidget extends Component {
                     {...props}
                     style={{
                       display: 'flex',
-                      width: '140px',
-                      height: '50px',
+                      width: '155px',
+                      height: '53px',
                       borderRadius: '10px',
                       border: 'solid 1px #e5e5e5',
                       fontSize: '18px',
                       color: '#4a4a4a',
                       fontFamily: 'Roboto',
                       paddingLeft: '16px',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      boxSizing: 'border-box',
+                      paddingLeft: '12px'
                     }}
                     readOnly={true}
                   />
