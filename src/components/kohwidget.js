@@ -38,6 +38,7 @@ const ImgDiv = styled.div`
     color: #ffc800 !important;
     font-weight: 700 !important;
     margin: 0 0 10px !important;
+    line-height: 1 !important;
   }
 
   ._descText {
@@ -57,14 +58,16 @@ const ImgDiv = styled.div`
   }
 
   #date {
-    width: 130px !important;
+    width: 150px !important;
     border: 1px solid #d8d8d8 !important;
     border-radius: 10px !important;
     box-shadow: 0 1px 4px 0 rgba(45, 45, 45, 0.2) !important;
     transition: 0.2s !important;
     font-weight: 400 !important;
+    fotn-family: 'Roboto';
     font-size: 16px !important;
-    height: 32px !important;
+    height: 53px !important;
+    box-sizing: border-box !important;
   }
   #date:hover {
     box-shadow: 0 1px 7px 0 rgba(255, 200, 0, 0.08) !important;
@@ -353,7 +356,8 @@ class KohWidget extends Component {
                     fontSize: '18px',
                     color: '#4a4a4a',
                     fontFamily: 'Roboto',
-                    paddingLeft: '16px'
+                    paddingLeft: '16px',
+                    fontWeight: 400
                   }}
                 />
               )
@@ -400,7 +404,8 @@ class KohWidget extends Component {
                     fontSize: '18px',
                     color: '#4a4a4a',
                     fontFamily: 'Roboto',
-                    paddingLeft: '16px'
+                    paddingLeft: '16px',
+                    fontWeight: 400
                   }}
                 />
               )
@@ -472,7 +477,8 @@ class KohWidget extends Component {
                       paddingLeft: '16px',
                       cursor: 'pointer',
                       boxSizing: 'border-box',
-                      paddingLeft: '12px'
+                      paddingLeft: '12px',
+                      fontWeight: 400
                     }}
                     readOnly={true}
                   />
