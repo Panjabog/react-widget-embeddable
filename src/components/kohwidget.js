@@ -26,6 +26,7 @@ const ImgDiv = styled.div`
   border-radius: 10px !important;
   margin: 30px auto 30px auto !important;
   padding: 10px 18px 0 18px !important;
+  box-sizing: border-box !important;
 
   ._logo {
     height: 58px !important;
@@ -47,7 +48,7 @@ const ImgDiv = styled.div`
     margin: 0 0 5px !important;
     width: ${320 - 36}px !important;
     word-wrap: break-word !important;
-    line-height: none !important;
+    line-height: 1 !important;
   }
 
   ._vehicleIcon {
@@ -449,7 +450,7 @@ class KohWidget extends Component {
             <Autocomplete
               wrapperStyle={{
                 display: 'flex',
-                width: '155px',
+                width: '125px',
                 marginLeft: 'auto',
                 marginRight: 0
               }}
@@ -461,7 +462,7 @@ class KohWidget extends Component {
                     {...props}
                     style={{
                       display: 'flex',
-                      width: '155px',
+                      width: '125px',
                       height: '53px',
                       borderRadius: '10px',
                       border: 'solid 1px #e5e5e5',
