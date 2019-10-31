@@ -27,11 +27,9 @@ const ImgDiv = styled.div`
   padding: 10px 18px 0 18px !important;
   box-sizing: border-box !important;
 
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  content: '';
+  display: block;
+  padding-top: 30%;
 
   ._logo {
     height: 58px !important;
