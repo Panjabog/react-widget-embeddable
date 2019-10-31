@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import 'react-dates/lib/css/_datepicker.css'
 import 'react-dates/initialize'
-import { DateRangePicker, SingleDatePicker } from 'react-dates'
+import { SingleDatePicker } from 'react-dates'
 import Autocomplete from 'react-autocomplete'
 import axios from 'axios'
 import moment from 'moment'
@@ -16,42 +16,42 @@ import VehicleIcon from './assets/homepage-icon.png'
 import { amountData } from './data'
 
 const ImgDiv = styled.div`
-  background-image: url(${BackGround});
-  background-position: center center;
-  background-color: grey;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 430px;
-  width: 320px;
-  border-radius: 10px;
-  margin: 30px auto 30px auto;
-  padding: 10px 18px 0 18px;
+  background-image: url(${BackGround}) !important;
+  background-position: center center !important;
+  background-color: grey !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  height: 430px !important;
+  width: 320px !important;
+  border-radius: 10px !important;
+  margin: 30px auto 30px auto !important;
+  padding: 10px 18px 0 18px !important;
 
   ._logo {
-    height: 58px;
+    height: 58px !important;
   }
 
   ._webText {
-    font-family: 'Ubuntu';
-    font-size: 22px;
-    color: #ffc800;
-    font-weight: 700;
-    margin: 0 0 10px;
+    font-family: 'Ubuntu' !important;
+    font-size: 22px !important;
+    color: #ffc800 !important;
+    font-weight: 700 !important;
+    margin: 0 0 10px !important;
   }
 
   ._descText {
-    font-family: 'Ubuntu';
-    font-size: 22px;
-    color: #ffffff;
-    font-weight: 700;
-    margin: 0 0 5px;
-    width: ${320 - 36}px;
-    word-wrap: break-word;
+    font-family: 'Ubuntu' !important;
+    font-size: 22px !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    margin: 0 0 5px !important;
+    width: ${320 - 36}px !important;
+    word-wrap: break-word !important;
   }
 
   ._vehicleIcon {
-    height: 26px;
-    margin-bottom: 15px;
+    height: 26px !important;
+    margin-bottom: 15px !important;
   }
 
   #date {
@@ -73,15 +73,15 @@ const ImgDiv = styled.div`
   .CalendarDay__selected,
   .CalendarDay__selected:active,
   .CalendarDay__selected:hover {
-    background: #ffc800;
-    border: 1px double #e4e7e7;
-    color: #4a4a4a;
+    background: #ffc800 !important;
+    border: 1px double #e4e7e7 !important;
+    color: #4a4a4a !important;
   }
 
   .CalendarDay__default:hover {
-    background: #fffce6;
-    border: 1px solid #e4e7e7;
-    color: inherit;
+    background: #fffce6 !important;
+    border: 1px solid #e4e7e7 !important;
+    color: inherit !important;
   }
 
   .SingleDatePickerInput {
@@ -96,12 +96,12 @@ const ImgDiv = styled.div`
   }
 
   ._button {
-    width: 100%;
-    height: 50px;
-    border-radius: 10px;
-    background: #ffc800;
-    border: 1px solid #ffc800;
-    cursor: pointer;
+    width: 100% !important;
+    height: 50px !important;
+    border-radius: 10px !important;
+    background: #ffc800 !important;
+    border: 1px solid #ffc800 !important;
+    cursor: pointer !important;
 
     ._text {
       font-size: 14px !important;
@@ -111,7 +111,7 @@ const ImgDiv = styled.div`
     }
 
     &:hover {
-      background: #deb316;
+      background: #deb316 !important;
     }
   }
 `
