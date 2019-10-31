@@ -24,7 +24,6 @@ const ImgDiv = styled.div`
   height: 430px !important;
   width: 320px !important;
   border-radius: 10px !important;
-  margin: 30px auto 30px auto !important;
   padding: 10px 18px 0 18px !important;
   box-sizing: border-box !important;
 
