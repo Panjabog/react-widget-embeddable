@@ -344,7 +344,7 @@ class KohWidget extends Component {
     // console.log('arrivalKey >>> ', arrivalKey)
     return (
       <Fragment>
-        <ImgDiv id="koh-widget" position={focused}>
+        <ImgDiv position={focused}>
           <img className="_logo" src={KohIcon} alt={KohIcon} />
           <p className="_webText">KOHLIFE.COM</p>
           <p className="_descText">Get cheap tickets across Southeast Asia</p>

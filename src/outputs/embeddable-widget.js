@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Widget from '../components/widget'
 import KohWidget from '../components/kohwidget'
-// import '../../vendor/cleanslate.css'
+import '../../vendor/cleanslate.css'
 
 export default class EmbeddableWidget {
   static el
@@ -15,6 +15,7 @@ export default class EmbeddableWidget {
         throw new Error('EmbeddableWidget is already mount, unmount first')
       }
       const el = document.createElement('div')
+      el.setAttribute('id', 'kohlife-widget')
       el.setAttribute('class', 'cleanslate')
 
       if (parentElement) {
