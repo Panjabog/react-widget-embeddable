@@ -10,8 +10,8 @@ import axios from 'axios'
 import moment from 'moment'
 
 import './widget.scss'
-import BackGround from './assets/background_desktop.jpg'
-import KohIcon from './assets/icr_logo_yellow.png'
+import BackGround from './assets/widget.jpg'
+import KohIcon from './assets/kor_icon.png'
 import VehicleIcon from './assets/homepage-icon.png'
 import { amountData } from './data'
 
@@ -97,6 +97,16 @@ const ImgDiv = styled.div`
 
   .SingleDatePickerInput__withBorder {
     border: none !important;
+  }
+
+  .SingleDatePicker {
+    position: ${props => (props.position ? 'relatice' : 'static')} !important;
+    display: inline-block !important;
+  }
+
+  .DateInput {
+    position: ${props => (props.position ? 'relatice' : 'static')} !important;
+    display: inline-block !important;
   }
 
   ._button {
@@ -299,12 +309,16 @@ class KohWidget extends Component {
       console.log('date >>> ', moment(date._d).format('YYYY-MM-DD'))
       const url = `https://www.kohlife.com/transport/${departureKey}/${arrivalKey}/${moment(
         date._d
-      ).format('YYYY-MM-DD')}/${amount}`
+      ).format('YYYY-MM-DD')}/${amount}?pid=PGQI24`
 
       // window.location = url
       window.open(url, '_blank')
     } else {
-      console.log('not commit!')
+      const url = `https://www.kohlife.com/transport/${departureKey}/${arrivalKey}/${moment()
+        .add(1, 'days')
+        .format('YYYY-MM-DD')}/${amount}?pid=PGQI24`
+
+      window.open(url, '_blank')
     }
   }
 
@@ -319,167 +333,48 @@ class KohWidget extends Component {
       routematch,
       getDate,
       date,
-      amount
+      amount,
+      focused
     } = this.state
 
     const departureList = filterRouteBlank(departureOption, routematch)
     const arrivalList = filterRouteBlank(arrivalOption, routematch)
 
-    // console.log('departureKey >>> ', departureKey)
+    // console.log('focused >>> ', focused)
     // console.log('arrivalKey >>> ', arrivalKey)
     return (
       <Fragment>
-        <ImgDiv>
+        <ImgDiv position={focused}>
           <img className="_logo" src={KohIcon} alt={KohIcon} />
           <p className="_webText">KOHLIFE.COM</p>
           <p className="_descText">Get cheap tickets across Southeast Asia</p>
           <img className="_vehicleIcon" src={VehicleIcon} alt="VehicleIcon" />
           <br />
-          <Autocomplete
-            wrapperStyle={{
-              display: 'flex',
-              width: '100%'
-            }}
-            getItemValue={item => item.label}
-            items={departureList}
-            renderInput={props => {
-              return (
-                <input
-                  {...props}
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '50px',
-                    borderRadius: '10px 10px 0 0',
-                    border: 'solid 1px #e5e5e5',
-                    fontSize: '18px',
-                    color: '#4a4a4a',
-                    fontFamily: 'Roboto',
-                    paddingLeft: '16px',
-                    fontWeight: 400
-                  }}
-                />
-              )
-            }}
-            renderItem={(item, isHighlighted) => {
-              return (
-                <div
-                  style={{
-                    display: 'flex',
-                    background: isHighlighted ? '#ffc800' : 'white',
-                    fontSize: '16px',
-                    fontFamily: 'Roboto',
-                    color: '#4a4a4a',
-                    padding: '8px 16px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {item.label}
-                </div>
-              )
-            }}
-            value={departure}
-            onChange={this.handleChange('departure')}
-            onSelect={this.handleSelect('departure')}
-          />
-          <Autocomplete
-            wrapperStyle={{
-              display: 'flex',
-              width: '100%',
-              marginBottom: '5px'
-            }}
-            getItemValue={item => item.label}
-            items={arrivalList}
-            renderInput={props => {
-              return (
-                <input
-                  {...props}
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '50px',
-                    borderRadius: '0 0 10px 10px',
-                    border: 'solid 1px #e5e5e5',
-                    fontSize: '18px',
-                    color: '#4a4a4a',
-                    fontFamily: 'Roboto',
-                    paddingLeft: '16px',
-                    fontWeight: 400
-                  }}
-                />
-              )
-            }}
-            renderItem={(item, isHighlighted) => {
-              return (
-                <div
-                  style={{
-                    display: 'flex',
-                    background: isHighlighted ? '#ffc800' : 'white',
-                    fontSize: '16px',
-                    fontFamily: 'Roboto',
-                    color: '#4a4a4a',
-                    padding: '8px 16px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {item.label}
-                </div>
-              )
-            }}
-            value={arrival}
-            onChange={this.handleChange('arrival')}
-            onSelect={this.handleSelect('arrival')}
-          />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              width: '100%',
-              marginBottom: '5px'
-            }}
-          >
-            <SingleDatePicker
-              placeholder="When?"
-              date={date}
-              onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
-              focused={this.state.focused} // PropTypes.bool
-              onFocusChange={({ focused }) => this.setState({ focused })}
-              // className="_date-input"
-              displayFormat="ddd, MMM DD"
-              hideKeyboardShortcutsPanel={true}
-              inputIconPosition="after"
-              numberOfMonths={1}
-              readOnly={true}
-            />
+          <div style={{ position: 'relative' }}>
             <Autocomplete
               wrapperStyle={{
                 display: 'flex',
-                width: '125px',
-                marginLeft: 'auto',
-                marginRight: 0
+                width: '100%'
               }}
               getItemValue={item => item.label}
-              items={amountData}
+              items={departureList}
               renderInput={props => {
                 return (
                   <input
+                    placeholder="From"
                     {...props}
                     style={{
                       display: 'flex',
-                      width: '125px',
-                      height: '53px',
-                      borderRadius: '10px',
+                      width: '100%',
+                      height: '50px',
+                      borderRadius: '10px 10px 0 0',
                       border: 'solid 1px #e5e5e5',
                       fontSize: '18px',
                       color: '#4a4a4a',
                       fontFamily: 'Roboto',
                       paddingLeft: '16px',
-                      cursor: 'pointer',
-                      boxSizing: 'border-box',
-                      paddingLeft: '12px',
                       fontWeight: 400
                     }}
-                    readOnly={true}
                   />
                 )
               }}
@@ -500,13 +395,138 @@ class KohWidget extends Component {
                   </div>
                 )
               }}
-              value={amount}
-              onSelect={val => this.handleAmount(val)}
+              value={departure}
+              onChange={this.handleChange('departure')}
+              onSelect={this.handleSelect('departure')}
             />
+            <Autocomplete
+              wrapperStyle={{
+                display: 'flex',
+                width: '100%',
+                marginBottom: '5px'
+              }}
+              getItemValue={item => item.label}
+              items={arrivalList}
+              renderInput={props => {
+                return (
+                  <input
+                    placeholder="To Where?"
+                    {...props}
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      height: '50px',
+                      borderRadius: '0 0 10px 10px',
+                      border: 'solid 1px #e5e5e5',
+                      fontSize: '18px',
+                      color: '#4a4a4a',
+                      fontFamily: 'Roboto',
+                      paddingLeft: '16px',
+                      fontWeight: 400
+                    }}
+                  />
+                )
+              }}
+              renderItem={(item, isHighlighted) => {
+                return (
+                  <div
+                    style={{
+                      display: 'flex',
+                      background: isHighlighted ? '#ffc800' : 'white',
+                      fontSize: '16px',
+                      fontFamily: 'Roboto',
+                      color: '#4a4a4a',
+                      padding: '8px 16px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                )
+              }}
+              value={arrival}
+              onChange={this.handleChange('arrival')}
+              onSelect={this.handleSelect('arrival')}
+            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
+                marginBottom: '5px'
+              }}
+            >
+              <SingleDatePicker
+                placeholder="When?"
+                date={date}
+                focused={this.state.focused} // PropTypes.bool
+                onFocusChange={({ focused }) => this.setState({ focused })}
+                onBlur={() => this.setState({ focused: null })}
+                onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+                // className="_date-input"
+                displayFormat="ddd, MMM DD"
+                hideKeyboardShortcutsPanel={true}
+                inputIconPosition="after"
+                numberOfMonths={1}
+                readOnly={true}
+              />
+              <Autocomplete
+                wrapperStyle={{
+                  display: 'flex',
+                  width: '125px',
+                  marginLeft: 'auto',
+                  marginRight: 0
+                }}
+                getItemValue={item => item.label}
+                items={amountData}
+                renderInput={props => {
+                  return (
+                    <input
+                      {...props}
+                      style={{
+                        display: 'flex',
+                        width: '125px',
+                        height: '53px',
+                        borderRadius: '10px',
+                        border: 'solid 1px #e5e5e5',
+                        fontSize: '18px',
+                        color: '#4a4a4a',
+                        fontFamily: 'Roboto',
+                        paddingLeft: '16px',
+                        cursor: 'pointer',
+                        boxSizing: 'border-box',
+                        paddingLeft: '12px',
+                        fontWeight: 400
+                      }}
+                      readOnly={true}
+                    />
+                  )
+                }}
+                renderItem={(item, isHighlighted) => {
+                  return (
+                    <div
+                      style={{
+                        display: 'flex',
+                        background: isHighlighted ? '#ffc800' : 'white',
+                        fontSize: '16px',
+                        fontFamily: 'Roboto',
+                        color: '#4a4a4a',
+                        padding: '8px 16px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {item.label}
+                    </div>
+                  )
+                }}
+                value={amount}
+                onSelect={val => this.handleAmount(val)}
+              />
+            </div>
+            <button className="_button" onClick={this.handleClick}>
+              <p className="_text">Search</p>
+            </button>
           </div>
-          <button className="_button" onClick={this.handleClick}>
-            <p className="_text">Search</p>
-          </button>
         </ImgDiv>
       </Fragment>
     )
