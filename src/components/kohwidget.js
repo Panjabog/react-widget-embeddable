@@ -184,12 +184,12 @@ class KohWidget extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      departure: 'Bangkok',
+      departure: props.Departure,
       departureOption: [],
-      departureKey: 'bangkok',
-      arrival: 'Chiangmai',
+      departureKey: props.DepartureKey,
+      arrival: props.Arrival,
       arrivalOption: [],
-      arrivalKey: 'chiangmai',
+      arrivalKey: props.ArrivalKey,
       routematch: {},
       getDate: null,
       focused: null,
@@ -556,24 +556,22 @@ class KohWidget extends Component {
   }
 }
 
-// Widget.PropTypes = {
-//   headerText: PropTypes.string,
-//   bodyText: PropTypes.string,
-//   footerText: PropTypes.string
-// }
-
-// Widget.defaultProps = {
-//   headerText: 'Header',
-//   bodyText: 'Hello World!!!',
-//   footerText: 'Footer'
-// }
 
 KohWidget.PropTypes = {
-  background: PropTypes.string
+  background: PropTypes.string,
+  Departure: PropTypes.string,
+  DepartureKey: PropTypes.string,
+  Arrival: PropTypes.string,
+  ArrivalKey: PropTypes.string
 }
 
 KohWidget.defaultProps = {
-  background: 'widget01'
+  background: 'widget02',
+  Departure: 'Hat Yai',
+  DepartureKey: 'hat-yai',
+  Arrival: 'Koh Lipe',
+  ArrivalKey : 'koh-lipe'
+
 }
 
 export default KohWidget
