@@ -11,12 +11,14 @@ import moment from 'moment'
 
 import './widget.scss'
 import BackGround from './assets/widget.jpg'
+import BackGround02 from './assets/widget02.png'
 import KohIcon from './assets/kor_icon.png'
 import VehicleIcon from './assets/homepage-icon.png'
+import Swap from './assets/swap.png'
 import { amountData } from './data'
 
 const ImgDiv = styled.div`
-  background-image: url(${BackGround}) !important;
+  background-image: url(${props => (props.background === 'widget01' ? BackGround : BackGround02)}) !important;
   background-position: center center !important;
   background-color: grey !important;
   background-size: cover !important;
@@ -52,8 +54,15 @@ const ImgDiv = styled.div`
   }
 
   ._vehicleIcon {
-    height: 26px !important;
-    margin-bottom: 15px !important;
+    height: 37px !important;
+  }
+
+  ._swap {
+    position: absolute;
+    right: 7px;
+    top: 7%
+    height: 33px !important;
+    cursor: pointer; 
   }
 
   #date {
@@ -322,6 +331,11 @@ class KohWidget extends Component {
     }
   }
 
+  handleSwap = () => {
+    const { departure, arrival, departureKey, arrivalKey } = this.state
+    console.log('Swap')
+  }
+
   render() {
     const {
       departureOption,
@@ -337,6 +351,8 @@ class KohWidget extends Component {
       focused
     } = this.state
 
+    const {background} = this.props
+
     const departureList = filterRouteBlank(departureOption, routematch)
     const arrivalList = filterRouteBlank(arrivalOption, routematch)
 
@@ -344,7 +360,7 @@ class KohWidget extends Component {
     // console.log('arrivalKey >>> ', arrivalKey)
     return (
       <Fragment>
-        <ImgDiv position={focused}>
+        <ImgDiv position={focused} background={background}>
           <img className="_logo" src={KohIcon} alt={KohIcon} />
           <p className="_webText">KOHLIFE.COM</p>
           <p className="_descText">Get cheap tickets across Southeast Asia</p>
@@ -354,7 +370,8 @@ class KohWidget extends Component {
             <Autocomplete
               wrapperStyle={{
                 display: 'flex',
-                width: '100%'
+                width: '100%',
+                position: 'relative'
               }}
               getItemValue={item => item.label}
               items={departureList}
@@ -398,6 +415,12 @@ class KohWidget extends Component {
               value={departure}
               onChange={this.handleChange('departure')}
               onSelect={this.handleSelect('departure')}
+            />
+            <img
+              className="_swap"
+              src={Swap}
+              alt="Swap"
+              onClick={this.handleSwap}
             />
             <Autocomplete
               wrapperStyle={{
@@ -531,6 +554,26 @@ class KohWidget extends Component {
       </Fragment>
     )
   }
+}
+
+// Widget.PropTypes = {
+//   headerText: PropTypes.string,
+//   bodyText: PropTypes.string,
+//   footerText: PropTypes.string
+// }
+
+// Widget.defaultProps = {
+//   headerText: 'Header',
+//   bodyText: 'Hello World!!!',
+//   footerText: 'Footer'
+// }
+
+KohWidget.PropTypes = {
+  background: PropTypes.string
+}
+
+KohWidget.defaultProps = {
+  background: 'widget01'
 }
 
 export default KohWidget
