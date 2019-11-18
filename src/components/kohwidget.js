@@ -566,11 +566,11 @@ KohWidget.PropTypes = {
 }
 
 KohWidget.defaultProps = {
-  background: 'widget02',
-  Departure: 'Hat Yai',
-  DepartureKey: 'hat-yai',
-  Arrival: 'Koh Lipe',
-  ArrivalKey : 'koh-lipe'
+  background: 'widget01',
+  Departure: 'Bangkok',
+  DepartureKey: 'bangkok',
+  Arrival: 'Chiangmai',
+  ArrivalKey : 'chiangmai'
 
 }
 
